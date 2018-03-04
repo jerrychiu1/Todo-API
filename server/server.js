@@ -8,6 +8,7 @@ var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todos');
 var {User} = require('./models/user');
 var {ObjectID} = require('mongodb');
+var {authenticate} = require('./middleware/authenticate');
 
 
 var app = express();
@@ -115,6 +116,11 @@ app.post('/users', (req, res) => {
     }).catch((e) => {
         res.status(404).send(e);
     });
+});
+
+// GET /users/me
+app.get('/users/me', authenticate, (req, res) => {
+    res.send(req.user);
 });
 
 app.listen(port, () => {
